@@ -6,3 +6,5 @@
 -  iOS (Objective-C)
 -  Javascript (including VueJS, React-Native, React)
 -  Laravel (PHP)
+-  Python
+-  NodeJS
