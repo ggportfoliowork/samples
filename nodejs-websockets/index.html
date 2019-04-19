@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Test Page</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.7.4/css/bulma.min.css" />
+</head>
+<body>
+<div class="container">
+    <h1 class="is-size-1">Test Socket Page</h1>
+    <div class="field">
+        <div class="control">
+            <input type="text" class="input is-large" id="message" placeholder="Message to emit" />
+        </div>
+    </div>
+    <div class="field">
+        <div class="control">
+            <button class="is-primary button is-large" onclick="emitMessage()">Emit Message</button>
+        </div>
+    </div>
+    <div id="receivedPayloads"></div>
+</div>
+<!-- Pull in latest socket.io CDN to open up the io object -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/1.0.0/socket.io.js"></script>
+<script>
+
+    // Connect to localhost, poll websockets
+    const socket = io.connect(window.location.hostname +":3000", {'transports': ['websocket', 'polling']})
+
+    // Listen on wildcard socket channel
+    socket.on('*', (message) => {
+        let receivedPayloads = document.getElementById('receivedPayloads')
+        receivedPayloads.innerHTML = receivedPayloads.innerHTML + writePayload(message)
+    })
+
+    // Confirm connection established
+    socket.on('connect', (connnection) => {
+        console.log("Connection established")
+    })
+
+    // Emit a message to the socket server
+    function emitMessage() {
+        let message = document.getElementById('message')
+        socket.emit('send',
+            {
+                datetime: new Date,
+                message: message.value
+            }
+        )
+    }
+
+    // DOM manipulation
+    function writePayload(message) {
+        console.log(message)
+        return "<div class='columns'><div class='column is-full'>" + message.datetime + " : " + message.message + "</div></div>"
+    }
+</script>
+</body>
+</html>
