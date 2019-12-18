@@ -81,7 +81,7 @@ class SongSearcher
                 $songs = $this->youtube->searchAdvanced([
                     'q' => '',
                     'pageToken' => null,
-                    'videoCategoryId' => config('musenyx.yt_category_id'),
+                    'videoCategoryId' => config('yt_category_id'),
                     'part' => implode(', ', $part),
                     'type' => 'video',
                     'maxResults' => 50,
